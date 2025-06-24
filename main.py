@@ -12,6 +12,8 @@ from pynput.keyboard import Key, Controller
 # Load .env
 load_dotenv()
 
+OPENROUTER_MODEL = "mistralai/mistral-7b-instruct:free"
+
 # Argument parsing
 parser = argparse.ArgumentParser(description="AI Typing Assistant using OpenRouter GPT-4o")
 parser.add_argument("-v", "--verbose", action="store_true", help="Enable verbose logging")
@@ -68,7 +70,7 @@ def fix_text(text):
                 "Authorization": f"Bearer {OPENROUTER_API_KEY}"
             },
             json={
-                "model": "mistralai/mistral-7b-instruct:free",
+                "model": OPENROUTER_MODEL,
                 "messages": [
                     {"role": "user", "content": prompt}
                 ]
