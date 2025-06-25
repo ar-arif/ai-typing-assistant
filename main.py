@@ -61,7 +61,7 @@ Return only the corrected text, don't include a preamble."""
 def fix_text(text):
     prompt = PROMPT_TEMPLATE.substitute(text=text)
     log(f"Sending text to {OPENROUTER_MODEL}")
-    os.system(f"notify-send -i {CURRENT_DIR}/icon.png -t 0 'Sending text to {OPENROUTER_MODEL}'")
+    os.system(f"notify-send -i {CURRENT_DIR}/icon.png -t 0 'Ai Typing Assistant' 'Sending text to {OPENROUTER_MODEL}'")
     try:
         start = time.time()
         response = httpx.post(
@@ -81,11 +81,11 @@ def fix_text(text):
         response.raise_for_status()
         elapsed = time.time() - start
         log(f"Response from {OPENROUTER_MODEL} in {elapsed:.2f} seconds")
-        os.system(f"notify-send -i {CURRENT_DIR}/icon.png -t 0 'Response from {OPENROUTER_MODEL} in {elapsed:.2f} seconds'")
+        os.system(f"notify-send -i {CURRENT_DIR}/icon.png -t 0 'Ai Typing Assistant' 'Response from {OPENROUTER_MODEL} in {elapsed:.2f} seconds'")
         return response.json()["choices"][0]["message"]["content"].strip()
     except Exception as e:
         log(f"Error from {OPENROUTER_MODEL}: {e}")
-        os.system(f"notify-send -i {CURRENT_DIR}/icon.png -t 0 'Error from {OPENROUTER_MODEL}: {e}'")
+        os.system(f"notify-send -i {CURRENT_DIR}/icon.png -t 0 'Ai Typing Assistant' 'Error from {OPENROUTER_MODEL}: {e}'")
         return None
 
 def fix_selection():
