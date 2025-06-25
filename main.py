@@ -11,8 +11,8 @@ from pynput.keyboard import Key, Controller
 
 # Load .env
 load_dotenv()
-
-OPENROUTER_MODEL = "mistralai/mistral-7b-instruct:free"
+CURRENT_DIR = os.getcwd()
+OPENROUTER_MODEL = "openai/gpt-4o-mini-2024-07-18"
 
 # Argument parsing
 parser = argparse.ArgumentParser(description="AI Typing Assistant using OpenRouter GPT-4o")
@@ -60,7 +60,8 @@ Return only the corrected text, don't include a preamble."""
 
 def fix_text(text):
     prompt = PROMPT_TEMPLATE.substitute(text=text)
-    log("Sending text to OpenRouter")
+    log(f"Sending text to {OPENROUTER_MODEL}")
+    os.system(f"notify-send -i {CURRENT_DIR}/icon.png -t 0 'Sending text to {OPENROUTER_MODEL}'")
     try:
         start = time.time()
         response = httpx.post(
@@ -79,10 +80,12 @@ def fix_text(text):
         )
         response.raise_for_status()
         elapsed = time.time() - start
-        log(f"Received response from OpenRouter in {elapsed:.2f} seconds")
+        log(f"Response from {OPENROUTER_MODEL} in {elapsed:.2f} seconds")
+        os.system(f"notify-send -i {CURRENT_DIR}/icon.png -t 0 'Response from {OPENROUTER_MODEL} in {elapsed:.2f} seconds'")
         return response.json()["choices"][0]["message"]["content"].strip()
     except Exception as e:
-        log(f"Error from OpenRouter: {e}")
+        log(f"Error from {OPENROUTER_MODEL}: {e}")
+        os.system(f"notify-send -i {CURRENT_DIR}/icon.png -t 0 'Error from {OPENROUTER_MODEL}: {e}'")
         return None
 
 def fix_selection():
